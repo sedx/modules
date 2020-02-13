@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from "react";
-import { Button } from "antd";
+import React, { useCallback, useMemo, useContext } from "react";
+import { Button, Tooltip } from "antd";
 import activeModules from "utils/activeModules";
 import q from "qs";
+import { StoreContext } from "core";
 
 function ModuleBtn({ moduleName }: { moduleName: string }) {
   const roleLoaded = useMemo(() => activeModules.includes(moduleName), [
@@ -34,9 +35,27 @@ function ModuleBtn({ moduleName }: { moduleName: string }) {
 }
 
 const Info = () => {
+  const { store }: any = useContext(StoreContext);
+
   return (
     <>
       <h1>Пример использования дианмичесикх модулей</h1>
+      <p>
+        Загруженные модули:&nbsp;
+        <span style={{ fontSize: "20px", color: "#08c" }}>
+          {Object.values(store.modules).map((m: any) => {
+            console.log(m.moduleName, m.icon);
+            return (
+              <>
+                <Tooltip key={m.moduleName} title={m.moduleName}>
+                  {m.icon}
+                </Tooltip>
+                &nbsp;
+              </>
+            );
+          })}
+        </span>
+      </p>
       <div>
         <ModuleBtn moduleName="Role" />
         <ModuleBtn moduleName="Avatar" />

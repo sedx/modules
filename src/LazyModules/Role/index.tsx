@@ -1,3 +1,5 @@
+import React from 'react';
+import { Icon } from 'antd';
 import { createModule } from "core";
 
 import roleStore from "./model";
@@ -9,6 +11,11 @@ async function RoleLoader() {
   return Role.default;
 }
 
-const RoleModule = createModule("role", RoleLoader, roleStore);
+const RoleModule = createModule(
+  "role",
+  RoleLoader,
+  roleStore,
+  <Icon type="bug" />
+);
 
 export default RoleModule.create();

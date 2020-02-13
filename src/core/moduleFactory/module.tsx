@@ -11,23 +11,32 @@ export default function createModule(
   // Нужен для тех кейсов когда модуль отрисовывается не сразу, но есть какая-то логика завязанная на дургие модули
   component: () => Promise<React.ComponentType>,
   // store  состояния моудля
-  model: any
+  model: any,
+  icon: React.ReactElement
 ) {
-  return t
-    .model(name, {
-      moduleName: name,
-      state: t.optional(getType(model), getSnapshot(model))
-    })
-    .actions($ => {
-      return {
-        render(node: HTMLElement, store, props) {
-          renderReact(
-            <StoreContext store={store.modules[name].state} rootStore={store}>
-              <ComponentLoader component={component} name={name} {...props} />
-            </StoreContext>,
-            node
-          );
+  return (
+    t
+      // @ts-ignore
+      .model(name, {
+        moduleName: name,
+        state: t.optional(getType(model), getSnapshot(model))
+      })
+      .views($ => ({
+        get icon() {
+          return icon;
         }
-      };
-    });
+      }))
+      .actions($ => {
+        return {
+          render(node: HTMLElement, store, props) {
+            renderReact(
+              <StoreContext store={store.modules[name].state} rootStore={store}>
+                <ComponentLoader component={component} name={name} {...props} />
+              </StoreContext>,
+              node
+            );
+          }
+        };
+      })
+  );
 }
