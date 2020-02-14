@@ -1,6 +1,6 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext } from "react";
 
-export const StoreContext = createContext<any>(null);
+const StoreContext = createContext<any>(null);
 
 export default function StoreProvider({ store, rootStore, children }: any) {
   return (
@@ -8,4 +8,15 @@ export default function StoreProvider({ store, rootStore, children }: any) {
       {children}
     </StoreContext.Provider>
   );
+}
+
+export function useStore<ModuleStore = object, RootStore = object>(): {
+  store: ModuleStore;
+  rootStore: RootStore;
+} {
+  const stores = useContext(StoreContext);
+  if (!stores) {
+    throw new Error("You should wrapp components to StoreProvider");
+  }
+  return stores;
 }

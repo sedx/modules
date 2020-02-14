@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { observer } from "mobx-react";
 import { Avatar, Badge } from "antd";
 
-import { StoreContext } from "core";
+import { useStore } from "core";
 
 const UserAvatar = () => {
-  const { store }: any = useContext(StoreContext);
+  const { store } = useStore();
   return (
     <>
       {store.url && (

@@ -1,2 +1,2 @@
 export { default, ModuleState } from "./module";
-export { StoreContext } from "./StoreContext";
+export { default as StoreProvider, useStore } from "./StoreContext";

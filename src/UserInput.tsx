@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { observer } from "mobx-react";
-import { StoreContext } from "core";
+import { useStore } from "core";
 import { Input } from "antd";
 
 // Комопнент для изменения глобального имени пользователя
 const UserInput = () => {
-  const { rootStore }: any = useContext(StoreContext);
+  const { rootStore } = useStore();
   return (
     <label>
       Имя пользователя: &nbsp;

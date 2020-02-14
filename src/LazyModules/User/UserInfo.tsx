@@ -2,7 +2,7 @@ import React, { useMemo, useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { Card, Button } from "antd";
 
-import { StoreContext, RenderModule } from "core";
+import { useStore, RenderModule } from "core";
 
 const AvatarToggle = () => {
   const [s, setS] = useState(true);
@@ -27,7 +27,7 @@ const AvatarToggle = () => {
 };
 
 const UserInfo: React.FC = ({ children }) => {
-  const { rootStore, store }: any = useContext(StoreContext);
+  const { rootStore, store } = useStore();
   const role = useMemo(() => {
     try {
       return rootStore.modules.role.state;

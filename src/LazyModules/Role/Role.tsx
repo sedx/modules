@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { observer } from "mobx-react";
 
-import { StoreContext } from "core";
+import { useStore } from "core";
 
 const ROLES = ["admin", "tester", "client"];
 
 const Role = () => {
-  const { store, rootStore }: any = useContext(StoreContext);
+  const { store, rootStore } = useStore();
   return (
     <label>
       Роль пользователя {rootStore.core.user.name}:

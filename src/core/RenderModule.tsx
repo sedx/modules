@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useContext } from "react";
 import { observer } from "mobx-react";
 
-import { StoreContext } from "./moduleFactory/StoreContext";
+import { useStore } from "./moduleFactory/StoreContext";
 
 type Props = {
   id: string;
@@ -15,7 +15,7 @@ const RenderModule: React.FC<Props> = ({
   container: Container = "div",
   ...props
 }) => {
-  const { rootStore }: any = useContext(StoreContext);
+  const { rootStore } = useStore();
 
   const element = useRef(null);
   const render = useMemo(() => {

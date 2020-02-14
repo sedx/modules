@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useContext } from "react";
 import { Button, Tooltip } from "antd";
 import activeModules from "utils/activeModules";
 import q from "qs";
-import { StoreContext } from "core";
+import { useStore } from "core";
 
 function ModuleBtn({ moduleName }: { moduleName: string }) {
   const roleLoaded = useMemo(() => activeModules.includes(moduleName), [
@@ -40,7 +40,7 @@ function ModuleBtn({ moduleName }: { moduleName: string }) {
 }
 
 const Info = () => {
-  const { store }: any = useContext(StoreContext);
+  const { store } = useStore();
 
   return (
     <>
