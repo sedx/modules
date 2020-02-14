@@ -11,12 +11,17 @@ function ModuleBtn({ moduleName }: { moduleName: string }) {
 
   const toggleModule = useCallback(() => {
     const url = new URL(window.location.href);
+    const params = q.parse(window.location.href, { ignoreQueryPrefix: true });
     if (!roleLoaded) {
-      const search = q.stringify({ m: [...activeModules, moduleName] });
+      const search = q.stringify({
+        ...params,
+        m: [...activeModules, moduleName]
+      });
       url.search = search;
       window.location.href = url.toString();
     } else {
       url.search = q.stringify({
+        ...params,
         m: activeModules.filter(m => m !== moduleName)
       });
       window.location.href = url.toString();
