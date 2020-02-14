@@ -1,6 +1,6 @@
 import React from "react";
-import { Icon } from "antd";
-import { createModule } from "core";
+import { Icon, Badge } from "antd";
+import { createReactModule } from "core";
 import user from "./model";
 
 async function UserDetailLoaded() {
@@ -8,11 +8,9 @@ async function UserDetailLoaded() {
   return User.default;
 }
 
-const UserModule = createModule(
+export default createReactModule(
   "userDetails",
-  UserDetailLoaded,
   user,
+  UserDetailLoaded,
   <Icon type="contacts" />
 );
-
-export default UserModule.create();

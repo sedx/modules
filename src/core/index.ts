@@ -1,6 +1,6 @@
 export { default } from "./moduleLoader";
 export {
-  default as createModule,
+  createReactModule,
   StoreProvider,
   useStore,
   ModuleState

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Icon } from 'antd';
-import { createModule } from "core";
+import React from "react";
+import { Icon } from "antd";
+import { createReactModule } from "core";
 
 import roleStore from "./model";
 import sleep from "utils/sleep";
@@ -11,11 +11,9 @@ async function RoleLoader() {
   return Role.default;
 }
 
-const RoleModule = createModule(
+export default createReactModule(
   "role",
-  RoleLoader,
   roleStore,
+  RoleLoader,
   <Icon type="bug" />
 );
-
-export default RoleModule.create();

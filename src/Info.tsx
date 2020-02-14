@@ -51,7 +51,9 @@ const Info = () => {
           {Object.values(store.modules).map((m: any) => {
             return (
               <React.Fragment key={m.id}>
-                <Tooltip title={m.id}>{m.icon}</Tooltip>
+                <Tooltip title={m.id}>
+                  <span dangerouslySetInnerHTML={{ __html: m.icon }} />
+                </Tooltip>
                 &nbsp;
               </React.Fragment>
             );
