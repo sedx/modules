@@ -44,14 +44,11 @@ const Info = () => {
         Загруженные модули:&nbsp;
         <span style={{ fontSize: "20px", color: "#08c" }}>
           {Object.values(store.modules).map((m: any) => {
-            console.log(m.moduleName, m.icon);
             return (
-              <>
-                <Tooltip key={m.moduleName} title={m.moduleName}>
-                  {m.icon}
-                </Tooltip>
+              <React.Fragment key={m.moduleName}>
+                <Tooltip title={m.moduleName}>{m.icon}</Tooltip>
                 &nbsp;
-              </>
+              </React.Fragment>
             );
           })}
         </span>
