@@ -1,8 +1,38 @@
 import React from "react";
-import { types as t, getType, getSnapshot } from "mobx-state-tree";
-import { render as renderReact } from "react-dom";
+import {
+  types as t,
+  getType,
+  getSnapshot,
+  onPatch,
+  getParent,
+  Instance,
+  IDisposer,
+  ModelPropertiesDeclaration
+} from "mobx-state-tree";
+import { render as renderReact, unmountComponentAtNode } from "react-dom";
 import ComponentLoader from "./ComponentLoader";
 import StoreContext from "./StoreContext";
+
+const VisibleModule = t
+  .model({
+    isShown: false
+  })
+  .actions($ => ({
+    onlyWhenVisible(fn: () => Generator<IDisposer>) {
+      let disposers: IDisposer[] = [];
+      onPatch($, ({ path, value }) => {
+        if (path !== "/isShown") return;
+        if (value) {
+          for (let value of fn()) {
+            disposers.push(value);
+          }
+        } else {
+          disposers.forEach(d => d());
+          disposers = [];
+        }
+      });
+    }
+  }));
 
 export default function createModule(
   // Id моудля
@@ -14,29 +44,45 @@ export default function createModule(
   model: any,
   icon: React.ReactElement
 ) {
-  return (
-    t
-      // @ts-ignore
-      .model(name, {
-        moduleName: name,
-        state: t.optional(getType(model), getSnapshot(model))
-      })
-      .views($ => ({
-        get icon() {
-          return icon;
-        }
-      }))
-      .actions($ => {
-        return {
-          render(node: HTMLElement, store, props) {
-            renderReact(
-              <StoreContext store={store.modules[name].state} rootStore={store}>
-                <ComponentLoader component={component} name={name} {...props} />
-              </StoreContext>,
-              node
-            );
-          }
+  return VisibleModule.named(name)
+    .props({
+      moduleName: name,
+      state: t.optional(getType(model), getSnapshot(model))
+    })
+    .views($ => ({
+      get icon() {
+        return icon;
+      }
+    }))
+    .actions($ => ({
+      setIsShown(v: boolean) {
+        $.isShown = v;
+      }
+    }))
+    .actions($ => ({
+      render(node: HTMLElement, store, props) {
+        renderReact(
+          <StoreContext store={store.modules[name].state} rootStore={store}>
+            <ComponentLoader component={component} name={name} {...props} />
+          </StoreContext>,
+          node,
+          () => $.setIsShown(true)
+        );
+        return () => {
+          $.setIsShown(false);
+          unmountComponentAtNode(node);
         };
-      })
-  );
+      }
+    }));
 }
+export const ModuleState = <P extends ModelPropertiesDeclaration = {}>(
+  name: string,
+  props: P
+) => {
+  const model = t.model(name, props).views($ => ({
+    get module() {
+      return getParent<Instance<typeof VisibleModule>>($);
+    }
+  }));
+  return model;
+};

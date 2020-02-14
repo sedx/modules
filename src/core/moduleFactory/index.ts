@@ -1,2 +1,2 @@
-export { default } from "./module";
+export { default, ModuleState } from "./module";
 export { StoreContext } from "./StoreContext";
