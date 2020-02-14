@@ -27,7 +27,9 @@ const RenderModule: React.FC<Props> = ({
   }, [rootStore, moduleName]);
 
   React.useEffect(() => {
-    render && render(element.current, rootStore, props);
+    if (render) {
+      return render(element.current, rootStore, props);
+    }
   }, []);
 
   if (!render) {
