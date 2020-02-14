@@ -5,23 +5,23 @@ import {
   IStateTreeNode
 } from "mobx-state-tree";
 
-const RoleModel = t
-  .model("RoleState", {
-    roleName: t.string
-  })
+import { ModuleState } from "core";
+
+const RoleModel = ModuleState("RoleState", {
+  roleName: t.string
+})
   .actions($ => ({
-    // @ts-ignore
     setRole(role: string) {
       $.roleName = role;
-    },
-    // @ts-ignore
+    }
+  }))
+  .actions($ => ({
     afterAttach() {
       const store = getRoot<{
         core: { user: IStateTreeNode };
       }>($);
       onSnapshot(store.core.user, patch => {
         if (patch.name === "admin") {
-          // @ts-ignore
           $.setRole("admin");
         }
       });

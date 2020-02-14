@@ -1,20 +1,20 @@
 import { types as t, flow } from "mobx-state-tree";
 import Axios from "axios";
 
-const ExtendedUser = t
-  .model("ExtendedUser", {
-    userPet: t.maybe(t.string)
+import { ModuleState } from "core";
+
+const ExtendedUser = ModuleState("ExtendedUser", {
+  userPet: t.maybe(t.string)
+}).actions($ => ({
+  afterAttach: flow(function*() {
+    const {
+      data: { message }
+    } = yield Axios.get<{ message: string }>(
+      "https://dog.ceo/api/breeds/image/random"
+    );
+    $.userPet = message;
   })
-  .actions($ => ({
-    afterAttach: flow(function*() {
-      const {
-        data: { message }
-      } = yield Axios.get<{ message: string }>(
-        "https://dog.ceo/api/breeds/image/random"
-      );
-      $.userPet = message;
-    })
-  }));
+}));
 
 const extnedUserStore = ExtendedUser.create();
 

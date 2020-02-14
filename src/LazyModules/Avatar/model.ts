@@ -6,11 +6,12 @@ import {
 } from "mobx-state-tree";
 import get from "lodash.get";
 
-const Avatar = t
-  .model("avatar", {
-    url: "",
-    addon: ""
-  })
+import { ModuleState } from "core";
+
+const Avatar = ModuleState("avatar", {
+  url: "",
+  addon: ""
+})
   .actions($ => ({
     setAvatar(name) {
       if (!name) {
@@ -25,32 +26,36 @@ const Avatar = t
     },
     setAddon(role: string) {
       $.addon = role.toUpperCase()[0];
-    },
+    }
+  }))
+  .actions($ => ({
     afterAttach() {
       const store = getRoot<{
         core: { user: IStateTreeNode };
       }>($);
+
       const initName = get(store, "core.user.name");
-      initName &&
-        // @ts-ignore
-        $.setAvatar(initName);
-      // Подписываемся на изменения пользователя
-      onSnapshot(store.core.user, ({ name }) => {
-        // @ts-ignore
-        $.setAvatar(name);
-      });
+      initName && $.setAvatar(initName);
 
       // Если модуль ролей загружен....
       const role = get(store, "modules.role.state");
       if (role) {
-        // @ts-ignore
         $.setAddon(role.roleName);
-        // При изменении ставим аддон
-        onSnapshot(role, ({ roleName }: { roleName: string }) => {
-          // @ts-ignore
-          $.setAddon(roleName);
-        });
       }
+
+      $.module.onlyWhenVisible(function*() {
+        // Подписываемся на изменения пользователя
+        yield onSnapshot(store.core.user, ({ name }) => {
+          $.setAvatar(name);
+        });
+
+        if (role) {
+          // При изменении ставим аддон
+          yield onSnapshot(role, ({ roleName }: { roleName: string }) => {
+            $.setAddon(roleName);
+          });
+        }
+      });
     }
   }));
 
