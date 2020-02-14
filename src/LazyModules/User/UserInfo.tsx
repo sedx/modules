@@ -1,8 +1,30 @@
-import React, { useMemo, useContext } from "react";
+import React, { useMemo, useContext, useState } from "react";
 import { observer } from "mobx-react";
 import { Card, Button } from "antd";
 
 import { StoreContext, RenderModule } from "core";
+
+const AvatarToggle = () => {
+  const [s, setS] = useState(true);
+  if (s) {
+    return (
+      <div style={{ position: "relative" }}>
+        <RenderModule
+          moduleName="avatar"
+          container="span"
+          style={{ display: "inline-block" }}
+        />
+        <Button
+          shape="circle"
+          icon="close"
+          onClick={() => setS(false)}
+          style={{ position: "absolute", top: 0, right: 0 }}
+        />
+      </div>
+    );
+  }
+  return <Button onClick={() => setS(true)}>Показать аватар</Button>;
+};
 
 const UserInfo: React.FC = ({ children }) => {
   const { rootStore, store }: any = useContext(StoreContext);
@@ -17,11 +39,7 @@ const UserInfo: React.FC = ({ children }) => {
     <Card
       title={
         <>
-          <RenderModule
-            moduleName="avatar"
-            container="span"
-            style={{ display: "inline-block" }}
-          />
+          <AvatarToggle />
           {rootStore.core.user.name}
         </>
       }
