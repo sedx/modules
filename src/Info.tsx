@@ -50,8 +50,8 @@ const Info = () => {
         <span style={{ fontSize: "20px", color: "#08c" }}>
           {Object.values(store.modules).map((m: any) => {
             return (
-              <React.Fragment key={m.moduleName}>
-                <Tooltip title={m.moduleName}>{m.icon}</Tooltip>
+              <React.Fragment key={m.id}>
+                <Tooltip title={m.id}>{m.icon}</Tooltip>
                 &nbsp;
               </React.Fragment>
             );

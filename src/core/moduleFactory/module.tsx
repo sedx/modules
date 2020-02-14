@@ -36,7 +36,7 @@ const VisibleModule = t
 
 export default function createModule(
   // Id моудля
-  name: string,
+  id: string,
   // Загрузчик вьюхи
   // Нужен для тех кейсов когда модуль отрисовывается не сразу, но есть какая-то логика завязанная на дургие модули
   component: () => Promise<React.ComponentType>,
@@ -44,9 +44,9 @@ export default function createModule(
   model: any,
   icon: React.ReactElement
 ) {
-  return VisibleModule.named(name)
+  return VisibleModule.named(id)
     .props({
-      moduleName: name,
+      id,
       state: t.optional(getType(model), getSnapshot(model))
     })
     .views($ => ({
@@ -62,8 +62,8 @@ export default function createModule(
     .actions($ => ({
       render(node: HTMLElement, store, props) {
         renderReact(
-          <StoreContext store={store.modules[name].state} rootStore={store}>
-            <ComponentLoader component={component} name={name} {...props} />
+          <StoreContext store={store.modules[id].state} rootStore={store}>
+            <ComponentLoader component={component} id={id} {...props} />
           </StoreContext>,
           node,
           () => $.setIsShown(true)

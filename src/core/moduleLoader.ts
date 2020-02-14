@@ -14,8 +14,8 @@ export default async function loadModules(
     (acc, { default: d }) => {
       const [types, init] = acc;
       return [
-        { ...types, [d.moduleName]: getType(d) },
-        { ...init, [d.moduleName]: getSnapshot(d) }
+        { ...types, [d.id]: getType(d) },
+        { ...init, [d.id]: getSnapshot(d) }
       ];
     },
     [{}, {}]

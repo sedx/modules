@@ -1,11 +1,11 @@
 import React, { useState, useEffect, ComponentType } from "react";
 
 type Props = {
-  name: string;
+  id: string;
   component: () => Promise<ComponentType>;
 };
 
-export default function ComponentLoader({ component, name, ...props }: Props) {
+export default function ComponentLoader({ component, id, ...props }: Props) {
   const [Component, setComponent] = useState<React.ComponentType | undefined>(
     undefined
   );
@@ -20,5 +20,5 @@ export default function ComponentLoader({ component, name, ...props }: Props) {
   if (Component) {
     return <Component {...props} />;
   }
-  return <h1>Загружаем модуль {name}</h1>;
+  return <h1>Загружаем модуль {id}</h1>;
 }
