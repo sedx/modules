@@ -59,21 +59,27 @@ export default function createModule(
         $.isShown = v;
       }
     }))
-    .actions($ => ({
-      render(node: HTMLElement, store, props) {
-        renderReact(
-          <StoreContext store={store.modules[id].state} rootStore={store}>
-            <ComponentLoader component={component} id={id} {...props} />
-          </StoreContext>,
-          node,
-          () => $.setIsShown(true)
-        );
-        return () => {
-          $.setIsShown(false);
-          unmountComponentAtNode(node);
-        };
-      }
-    }));
+    .actions($ => {
+      const ModuleWrapper: React.FC = ({ children }) => <>{children}</>;
+      ModuleWrapper.displayName = `Module:${$.id}`;
+      return {
+        render(node: HTMLElement, store, props) {
+          renderReact(
+            <ModuleWrapper>
+              <StoreContext store={store.modules[id].state} rootStore={store}>
+                <ComponentLoader component={component} id={id} {...props} />
+              </StoreContext>
+            </ModuleWrapper>,
+            node,
+            () => $.setIsShown(true)
+          );
+          return () => {
+            $.setIsShown(false);
+            unmountComponentAtNode(node);
+          };
+        }
+      };
+    });
 }
 export const ModuleState = <P extends ModelPropertiesDeclaration = {}>(
   name: string,
