@@ -10,7 +10,7 @@ const AvatarToggle = () => {
     return (
       <div style={{ position: "relative" }}>
         <RenderModule
-          moduleName="avatar"
+          id="avatar"
           container="span"
           style={{ display: "inline-block" }}
         />

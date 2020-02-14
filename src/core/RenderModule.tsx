@@ -4,13 +4,13 @@ import { observer } from "mobx-react";
 import { StoreContext } from "./moduleFactory/StoreContext";
 
 type Props = {
-  moduleName: string;
+  id: string;
   style?: React.CSSProperties;
   container?: React.ElementType;
 };
 
 const RenderModule: React.FC<Props> = ({
-  moduleName,
+  id,
   style,
   container: Container = "div",
   ...props
@@ -20,11 +20,11 @@ const RenderModule: React.FC<Props> = ({
   const element = useRef(null);
   const render = useMemo(() => {
     try {
-      return rootStore.modules[moduleName].render;
+      return rootStore.modules[id].render;
     } catch (e) {
       return null;
     }
-  }, [rootStore, moduleName]);
+  }, [rootStore, id]);
 
   React.useEffect(() => {
     if (render) {
@@ -38,7 +38,7 @@ const RenderModule: React.FC<Props> = ({
 
   return (
     <fieldset style={style}>
-      <legend>Это модуль {moduleName}</legend>
+      <legend>Это модуль {id}</legend>
       <Container ref={element} />
     </fieldset>
   );

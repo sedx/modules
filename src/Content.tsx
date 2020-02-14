@@ -12,10 +12,8 @@ const Content = () => {
     <div className="App">
       <Info />
       <UserInput />
-      <RenderModule moduleName="userDetails">
-        Самый лучший пользователь
-      </RenderModule>
-      <RenderModule moduleName="role" />
+      <RenderModule id="userDetails">Самый лучший пользователь</RenderModule>
+      <RenderModule id="role" />
     </div>
   );
 };
